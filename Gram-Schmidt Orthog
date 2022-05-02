@@ -1,1 +1,37 @@
+m = 100; 
+n = 15;
+b = 15;
+t = (0:m-1)'/(m-1);
+A = []; 
+for i=1:n
+    A = [A t.^(i-1)];
+end
+b = exp(sin(4*t));
+b = b / 2006.787453080206;
 
+%x = A \ b;
+y = A*x;
+
+%gram schmidt orthog of A
+[Q,R] = mgs(A);
+x = R\(Q'*b);
+
+x(15)
+
+
+function [Q,R] =  mgs(X)
+    % Modified Gram-Schmidt.  [Q,R] = mgs(X);
+    % G. W. Stewart, "Matrix Algorithms, Volume 1", SIAM, 1998.
+    [n,p] = size(X);
+    Q = zeros(n,p);
+    R = zeros(p,p);
+    for k = 1:p
+        Q(:,k) = X(:,k);
+        for i = 1:k-1
+            R(i,k) = Q(:,i)'*Q(:,k);
+            Q(:,k) = Q(:,k) - R(i,k)*Q(:,i);
+        end
+        R(k,k) = norm(Q(:,k))';
+        Q(:,k) = Q(:,k)/R(k,k);
+    end
+end
