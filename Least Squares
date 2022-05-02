@@ -7,10 +7,15 @@ for i=1:n
     A = [A t.^(i-1)];
 end
 b = exp(sin(4*t));
+
+%normalize b
 b = b / 2006.787453080206;
 
+%solve least squares
 x = A \ b;
 y = A*x;
+
+%calculate condition# and determine sensitivity
 kappa = cond(A)
 theta = asin(norm(b-y) / norm(b))
 eta = norm(A) * norm(x) / norm(y)
